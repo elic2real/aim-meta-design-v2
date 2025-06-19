@@ -1,4 +1,3 @@
-# (If you have this file and use upload-artifact, update to v4 as below)
 name: Android CI
 
 on:
