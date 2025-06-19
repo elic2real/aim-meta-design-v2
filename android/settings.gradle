@@ -1,5 +1,7 @@
 // This file is required to tell Gradle which modules to include in the build.
-// In a standard Android project, it includes the main app module.
+// It defines both the main ':app' module and the ':capacitor-android' library module.
 
 include ':app'
+include ':capacitor-android'
 project(':app').projectDir = new File(rootDir, 'app')
+project(':capacitor-android').projectDir = new File(rootDir, '../node_modules/@capacitor/android/capacitor')
