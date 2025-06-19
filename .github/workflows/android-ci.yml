@@ -30,10 +30,10 @@ jobs:
       - name: Build Android App with Gradle
         uses: gradle/gradle-build-action@v3
         with:
-          # This new line tells the action which version of Gradle to use
           gradle-version: 7.5
           build-root-directory: android
-          arguments: assembleDebug
+          # Added arguments for better error logging
+          arguments: assembleDebug --stacktrace --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
