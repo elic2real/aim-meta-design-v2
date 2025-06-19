@@ -1,3 +1,8 @@
+// Include your main application module for building.
 include ':app'
+// Declares the Capacitor Android library as a module within your project.
 include ':capacitor-android'
+// **CRITICAL**: Specifies the exact file system path to the Capacitor Android source.
+// This ensures Gradle can find and compile the Capacitor native code.
+// Verify this path is correct relative to your 'android/' directory.
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
