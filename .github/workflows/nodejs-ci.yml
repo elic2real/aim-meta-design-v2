@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI Build
 
 on:
   push:
@@ -9,25 +9,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.x'
+          cache: 'npm'   # This enables automatic dependency caching
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci     # Use npm ci for clean, reproducible installs
 
-      # Optional: run your tests (uncomment this if you have tests)
-      # - name: Run tests
-      #   run: npm test
+      # New Step: Run the linter to check code quality before building.
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-build
-          path: ./build
+          name: build-output
+          path: ./build # Change this if your build output directory is different
