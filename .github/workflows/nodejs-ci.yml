@@ -9,10 +9,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./www
+    # The 'defaults' block has been removed to fix the pathing issue.
 
     steps:
       - name: Checkout repository
@@ -23,13 +20,17 @@ jobs:
         with:
           node-version: '20.x'
           cache: 'npm'
+          # This path is now resolved correctly from the repository root.
           cache-dependency-path: www/package.json
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./www
 
       - name: Lint source code
         run: npm run lint
+        working-directory: ./www
 
-      # The 'test' and 'build'/'upload' steps are removed as per the recommendation
-      # to ensure the workflow passes without defined tests or a build directory.
+      - name: Run test script
+        run: npm test
+        working-directory: ./www
