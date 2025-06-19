@@ -9,7 +9,6 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    # The 'defaults' block has been removed to fix the pathing issue.
 
     steps:
       - name: Checkout repository
@@ -20,7 +19,6 @@ jobs:
         with:
           node-version: '20.x'
           cache: 'npm'
-          # This path is now resolved correctly from the repository root.
           cache-dependency-path: www/package.json
 
       - name: Install dependencies
