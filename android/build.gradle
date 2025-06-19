@@ -1,26 +1,41 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    // Repositories where Gradle looks for the plugins themselves (like com.android.application).
-    repositories {
-        google()      // Google's Maven repository. Crucial for Android Gradle Plugin.
-        mavenCentral() // Maven Central repository.
+plugins {
+    // Apply the standard Android application plugin.
+    // This is the ONLY plugin ID that should be here for a basic Capacitor app.
+    id 'com.android.application'
+}
+
+android {
+    // Defines the unique package name for your application.
+    namespace "com.aim.metadesign"
+    compileSdkVersion 33
+    defaultConfig {
+        applicationId "com.aim.metadesign"
+        minSdkVersion 22
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    // Dependencies required for the build script itself.
-    dependencies {
-        // This is the Android Gradle Plugin. Its version must be compatible with your SDKs.
-        classpath 'com.android.tools.build:gradle:7.4.2'
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
-// Repositories where all project modules will look for their dependencies.
-allprojects {
-    repositories {
-        google()      // For AndroidX and other Google libraries.
-        mavenCentral() // For general dependencies.
-    }
-}
-
-// Task to clean build directories.
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // This is the **CORRECT** way to include the Capacitor Android module.
+    // It is a dependency, not a plugin applied via 'plugins {}' block.
+    implementation project(':capacitor-android')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
