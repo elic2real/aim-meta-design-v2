@@ -18,11 +18,11 @@ jobs:
         cache: gradle
 
     - name: Grant execute permission for gradlew
-      # Corrected to look for gradlew in the root directory
+      # This looks for 'gradlew' in the root directory, which is correct.
       run: chmod +x gradlew
       
     - name: Build with Gradle
-      # Corrected to run gradlew from the root and specify the android project path
+      # This runs the build command from the root directory.
       run: ./gradlew -p android assembleDebug
 
     - name: Upload APK
