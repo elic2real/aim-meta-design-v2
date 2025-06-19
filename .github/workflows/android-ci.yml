@@ -20,12 +20,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          # The 'cache' and 'cache-dependency-path' lines have been removed
-          # to resolve the pathing error.
 
       - name: Install Web Dependencies
         run: npm install
         working-directory: ./www
+
+      # --- New Step to Create the Android Platform ---
+      - name: Add Android Platform
+        run: npx cap add android
+        working-directory: ./www
+      # --- End of New Step ---
 
       - name: Sync Capacitor Assets
         run: npx cap sync android
