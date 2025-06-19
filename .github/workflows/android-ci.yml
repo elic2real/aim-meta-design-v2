@@ -30,6 +30,8 @@ jobs:
       - name: Build Android App with Gradle
         uses: gradle/gradle-build-action@v3
         with:
+          # This new line tells the action which version of Gradle to use
+          gradle-version: 7.5
           build-root-directory: android
           arguments: assembleDebug
 
