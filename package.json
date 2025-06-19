@@ -4,8 +4,7 @@
   "description": "Meta-Design App for AIM Protocol",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0",
-    "lint": "eslint ."
+    "test": "echo \"No tests defined\""
   },
   "keywords": [
     "meta-design",
@@ -26,8 +25,5 @@
     "@capacitor/android": "^5.0.0",
     "@capacitor/cli": "^5.0.0",
     "@capacitor/core": "^5.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.57.0"
   }
 }
