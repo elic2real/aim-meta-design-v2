@@ -1,26 +1,25 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-        buildscript {
-            repositories {
-                google()
-                mavenCentral()
-            }
-            dependencies {
-                // FORCE ANDROID GRADLE PLUGIN 7.4.2 FOR JAVA 17 COMPATIBILITY
-                classpath 'com.android.tools.build:gradle:7.4.2'
-            }
-        }
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // FORCE ANDROID GRADLE PLUGIN 7.4.2 FOR JAVA 17 COMPATIBILITY
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
 
-        allprojects {
-            repositories {
-                google()
-                mavenCenter()
-                flatDir {
-                    dirs 'libs'
-                }
-            }
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        flatDir {
+            dirs 'libs'
         }
+    }
+}
 
-        task clean(type: Delete) {
-            delete rootProject.buildDir
-        }
-        ```
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
