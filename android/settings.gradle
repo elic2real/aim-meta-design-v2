@@ -1,0 +1,5 @@
+// This file is required to tell Gradle which modules to include in the build.
+// In a standard Android project, it includes the main app module.
+
+include ':app'
+project(':app').projectDir = new File(rootDir, 'app')
