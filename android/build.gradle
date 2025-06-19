@@ -1,27 +1,36 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    // Repositories where Gradle looks for plugins themselves.
-    repositories {
-        google()      // Google's Maven repository, essential for Android Gradle Plugin and Jetpack libraries.
-        mavenCentral() // Maven Central repository, for general Java/Android libraries.
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace "com.aim.metadesign"
+    compileSdkVersion 33 // <-- THIS LINE ENSURES compileSdkVersion IS SPECIFIED
+    defaultConfig {
+        applicationId "com.aim.metadesign"
+        minSdkVersion 22
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    // Dependencies for the buildscript itself, including the Android Gradle Plugin.
-    dependencies {
-        // Defines the version of the Android Gradle Plugin. This is crucial!
-        // Ensure this version is compatible with your compileSdkVersion (33 in your app/build.gradle)
-        classpath 'com.android.tools.build:gradle:7.4.2' // Or a compatible version for SDK 33, e.g., 8.1.0 or newer.
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
-// Repositories where Gradle looks for project dependencies (used by all modules).
-allprojects {
-    repositories {
-        google()      // Essential for AndroidX and other Google libraries.
-        mavenCentral() // For general dependencies.
-    }
-}
-
-// Cleans the build directory when the 'clean' task is run.
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation project(':capacitor-android')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
