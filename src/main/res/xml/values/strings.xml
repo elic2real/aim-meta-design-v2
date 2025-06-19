@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">aim-metadesign</string>
+    <string name="title_activity_main">aim-metadesign</string>
+    <string name="package_name">com.aim.metadesign</string>
+    <string name="custom_url_scheme">com.aim.metadesign</string>
+</resources>
