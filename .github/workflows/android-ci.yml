@@ -23,17 +23,12 @@ jobs:
 
       - name: Install Web Dependencies
         run: npm install
-        working-directory: ./www
 
-      # --- New Step to Create the Android Platform ---
       - name: Add Android Platform
         run: npx cap add android
-        working-directory: ./www
-      # --- End of New Step ---
 
       - name: Sync Capacitor Assets
         run: npx cap sync android
-        working-directory: ./www
 
       - name: Build Android App with Gradle
         uses: gradle/gradle-build-action@v3
