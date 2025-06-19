@@ -7,26 +7,32 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
+    
+    # Sets the default working directory for all run steps in this job
+    defaults:
+      run:
+        working-directory: ./www
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.x'
+          cache: 'npm'
+          # Point caching to the correct package.json
+          cache-dependency-path: www/package.json
 
       - name: Install dependencies
+        # Using npm install because no package-lock.json is available
         run: npm install
 
-      # Optional: run your tests (uncomment if you have tests)
-      # - name: Run tests
-      #   run: npm test
+      - name: Lint source code
+        run: npm run lint
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-build
-          path: ./build
+      - name: Run test script
+        run: npm test
