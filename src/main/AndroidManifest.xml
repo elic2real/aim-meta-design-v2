@@ -23,7 +23,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+            <!-- Additional intent filters for custom schemes or deep linking can be added here -->
         </activity>
 
         <provider
@@ -33,9 +33,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths"/>
         </provider>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Add any additional permissions (e.g., CAMERA, READ_EXTERNAL_STORAGE) for your plugins as needed -->
 </manifest>
