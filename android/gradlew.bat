@@ -2,6 +2,7 @@
 @rem ------------------------------------------------------------------------------
 @rem Gradle start up script for Windows
 @rem ------------------------------------------------------------------------------
+
 setlocal
 
 @rem ------------------------------------------------------------------------------
@@ -28,7 +29,7 @@ setlocal
     ) else (
         set JAVACMD="%JAVA_HOME%\bin\java.exe"
     )
-    @if not exist "%JAVACMD%" (
+    @if not exist %JAVACMD% (
         echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
         echo.
         echo Please set the JAVA_HOME environment variable in your shell to the correct location of your Java Development Kit (JDK).
@@ -76,10 +77,10 @@ for /f "delims== tokens=2*" %%a in ("%WRAPPER_CHECKSUM%") do set WRAPPER_CHECKSU
 @if not "%WRAPPER_CHECKSUM%"=="" (
     @rem Verify the checksum of the wrapper JAR.
     set CURRENT_CHECKSUM=
-    for /f "usebackq" %%a in (`certutil -hashfile "%GRADLE_JAR%" SHA256 ^| findstr /B /C:"%GRADLE_JAR% SHA256 Hash:"`) do set CURRENT_CHECKSUM=%%a
-    set CURRENT_CHECKSUM=%CURRENT_CHECKSUM:*SHA256 Hash:=%
+    for /f "usebackq" %%a in (`certutil -hashfile "%GRADLE_JAR%" SHA256 ^| findstr /B /C:"SHA256 hash:"`) do set CURRENT_CHECKSUM=%%a
+    set CURRENT_CHECKSUM=%CURRENT_CHECKSUM:*SHA256 hash: =%
     set CURRENT_CHECKSUM=%CURRENT_CHECKSUM: =%
-    if not "%CURRENT_CHECKSUM%"=="%WRAPPER_CHECKSUM%" (
+    if /I not "%CURRENT_CHECKSUM%"=="%WRAPPER_CHECKSUM%" (
         echo ERROR: Gradle wrapper JAR checksum mismatch!
         echo Expected: %WRAPPER_CHECKSUM%
         echo Actual: %CURRENT_CHECKSUM%
