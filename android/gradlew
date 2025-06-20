@@ -1,0 +1,77 @@
+#!/usr/bin/env sh
+#
+# Copyright 2011-2023 the original author or authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Determine the Java command to use to launch the JVM.
+if [ -n "$JAVA_HOME" ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+        # IBM's JDK on AIX uses "$JAVA_HOME/jre/sh/java" as the system Java executable.
+        JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+        JAVACMD="$JAVA_HOME/bin/java"
+    fi
+    if [ ! -x "$JAVACMD" ] ; then
+        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
+
+Please set the JAVA_HOME environment variable in your shell to the correct location of your Java Development Kit (JDK)."
+    fi
+else
+    JAVACMD="java"
+fi
+
+# Determine the script directory.
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Determine the Gradle distribution properties.
+GRADLE_DIR="$SCRIPT_DIR/gradle"
+GRADLE_JAR="$GRADLE_DIR/wrapper/gradle-wrapper.jar"
+GRADLE_PROPERTIES="$GRADLE_DIR/wrapper/gradle-wrapper.properties"
+
+if [ ! -f "$GRADLE_JAR" ]; then
+    die "ERROR: Gradle wrapper JAR not found: $GRADLE_JAR"
+fi
+if [ ! -f "$GRADLE_PROPERTIES" ]; then
+    die "ERROR: Gradle wrapper properties not found: $GRADLE_PROPERTIES"
+fi
+
+# Read the distributionUrl from gradle-wrapper.properties.
+DISTRIBUTION_URL="$(grep 'distributionUrl' "$GRADLE_PROPERTIES" | cut -d '=' -f 2- | sed 's/\\//g')"
+if [ -z "$DISTRIBUTION_URL" ]; then
+    die "ERROR: distributionUrl not found in $GRADLE_PROPERTIES"
+fi
+
+# Calculate the wrapper checksum, if present.
+WRAPPER_CHECKSUM="$(grep 'wrapperChecksum' "$GRADLE_PROPERTIES" | cut -d '=' -f 2-)"
+if [ -n "$WRAPPER_CHECKSUM" ]; then
+    # Verify the checksum of the wrapper JAR.
+    CURRENT_CHECKSUM="$(sha256sum "$GRADLE_JAR" | cut -d ' ' -f 1)"
+    if [ "$CURRENT_CHECKSUM" != "$WRAPPER_CHECKSUM" ]; then
+        die "ERROR: Gradle wrapper JAR checksum mismatch!
+Expected: $WRAPPER_CHECKSUM
+Actual: $CURRENT_CHECKSUM
+Please delete $GRADLE_JAR and try again."
+    fi
+fi
+
+# Determine the classpath.
+CLASSPATH="$GRADLE_JAR"
+
+# Set Gradle options (optional).
+DEFAULT_JVM_OPTS="-Xmx64m -Xms64m" # Adjust as needed
+GRADLE_OPTS="$GRADLE_OPTS $DEFAULT_JVM_OPTS"
+
+# Execute Gradle.
+exec "$JAVACMD" $GRADLE_OPTS -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
