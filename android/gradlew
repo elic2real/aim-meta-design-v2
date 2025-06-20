@@ -15,6 +15,11 @@
 # limitations under the License.
 #
 
+die() {
+  echo "$*" 1>&2
+  exit 1
+}
+
 # Determine the Java command to use to launch the JVM.
 if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
@@ -57,7 +62,13 @@ fi
 WRAPPER_CHECKSUM="$(grep 'wrapperChecksum' "$GRADLE_PROPERTIES" | cut -d '=' -f 2-)"
 if [ -n "$WRAPPER_CHECKSUM" ]; then
     # Verify the checksum of the wrapper JAR.
-    CURRENT_CHECKSUM="$(sha256sum "$GRADLE_JAR" | cut -d ' ' -f 1)"
+    if command -v sha256sum >/dev/null 2>&1; then
+        CURRENT_CHECKSUM="$(sha256sum "$GRADLE_JAR" | cut -d ' ' -f 1)"
+    elif command -v shasum >/dev/null 2>&1; then
+        CURRENT_CHECKSUM="$(shasum -a 256 "$GRADLE_JAR" | cut -d ' ' -f 1)"
+    else
+        die "ERROR: Neither 'sha256sum' nor 'shasum' is available to verify checksum."
+    fi
     if [ "$CURRENT_CHECKSUM" != "$WRAPPER_CHECKSUM" ]; then
         die "ERROR: Gradle wrapper JAR checksum mismatch!
 Expected: $WRAPPER_CHECKSUM
