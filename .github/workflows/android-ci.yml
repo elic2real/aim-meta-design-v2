@@ -22,33 +22,64 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      # --- Start: New/Updated Diagnostic & Fix Steps ---
+      # --- Start: Aggressive Clean & Diagnostics for JAR Issue ---
 
-      - name: Ensure gradlew has execute permissions
+      - name: Aggressively clear Gradle caches and existing wrapper files
         run: |
+          echo "Clearing global Gradle caches..."
+          rm -rf ~/.gradle/caches
+          rm -rf ~/.gradle/wrapper
+          echo "Clearing project-specific Gradle build directories..."
+          rm -rf android/.gradle
+          rm -rf android/build
+          rm -rf android/app/build
+          # Crucially, remove any potentially partial or corrupted wrapper JAR
+          echo "Removing existing gradle-wrapper.jar if present..."
+          rm -f android/gradle/wrapper/gradle-wrapper.jar
+        # This ensures a completely fresh state for Gradle and its wrapper.
+
+      - name: Ensure gradlew has execute permissions and verify directory contents
+        run: |
+          echo "Setting execute permissions for gradlew..."
           chmod +x android/gradlew
-        # This makes sure the gradlew script is executable.
+          echo "Listing contents of android/ directory:"
+          ls -la android/
+          echo "Listing contents of android/gradle/wrapper/ directory:"
+          ls -la android/gradle/wrapper/
+          echo "Checking available disk space:"
+          df -h .
+        # This provides a full view of permissions, existing files, and disk space.
 
-      - name: Debug - Show gradle-wrapper.properties content (for verification)
+      - name: Debug - Show gradle-wrapper.properties content (final verification)
         run: cat android/gradle/wrapper/gradle-wrapper.properties
-        # Verify the content is correct (gradle-8.0-all.zip).
+        # Double-check the distributionUrl once more.
 
-      - name: Debug - Which Java is being used (for verification)
+      - name: Debug - Check network connectivity to Gradle distributions
         run: |
-          java -version
-          which java
+          echo "Pinging services.gradle.org..."
+          ping -c 3 services.gradle.org
+          echo "Attempting to download JAR directly with wget (diagnostic only)..."
+          # Try to download the JAR directly. This will confirm network access.
+          # We use the exact URL from gradle-wrapper.properties.
+          wget -q --spider https://services.gradle.org/distributions/gradle-8.0-all.zip
+          if [ $? -eq 0 ]; then
+            echo "Direct download test successful. Network seems fine."
+          else
+            echo "Direct download test FAILED. Possible network issue or firewall."
+          fi
+        # This explicitly tests if the runner can even reach the download server.
 
       - name: Force Gradle Wrapper JAR download and verify version
         run: |
           cd android
-          ./gradlew help --no-daemon # 'help' is a light command. --no-daemon prevents daemon issues.
-        # This command will force the download of gradle-wrapper.jar if it's missing.
-        # It also implicitly runs a version check. If this passes, the JAR download was successful.
+          echo "Attempting to run gradlew help to trigger JAR download..."
+          ./gradlew help --no-daemon --stacktrace --info # Add --stacktrace and --info for more verbose logging
+        # This is the step that should trigger the download. More verbose logging might reveal why it fails.
 
-      # --- End: New/Updated Diagnostic & Fix Steps ---
+      # --- End: Aggressive Clean & Diagnostics for JAR Issue ---
 
       - name: Build Android App with Gradle
         run: |
           cd android
-          ./gradlew clean assembleDebug # Your actual build command
-        # This step will now run after the JAR has (hopefully) been downloaded and verified.
+          ./gradlew clean assembleDebug
+        # Your actual build command, which will run only if the previous step succeeded.
