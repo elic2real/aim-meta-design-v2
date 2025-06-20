@@ -22,32 +22,33 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Debug - List Android directory contents and permissions
+      # --- Start: New/Updated Diagnostic & Fix Steps ---
+
+      - name: Ensure gradlew has execute permissions
         run: |
-          ls -la android/
-          ls -la android/gradle/wrapper/
-          # Ensure gradlew has executable permissions
           chmod +x android/gradlew
-        # This will show if gradlew, gradlew.bat, and the gradle/wrapper folder exist, and their permissions.
+        # This makes sure the gradlew script is executable.
 
-      - name: Debug - Show gradle-wrapper.properties content
+      - name: Debug - Show gradle-wrapper.properties content (for verification)
         run: cat android/gradle/wrapper/gradle-wrapper.properties
-        # This confirms the content of the properties file as seen by the runner.
+        # Verify the content is correct (gradle-8.0-all.zip).
 
-      - name: Debug - Check which Java is being used
+      - name: Debug - Which Java is being used (for verification)
         run: |
           java -version
           which java
-        # Confirms JDK setup.
 
-      - name: Debug - Attempt to run gradlew version
+      - name: Force Gradle Wrapper JAR download and verify version
         run: |
           cd android
-          ./gradlew --version # This should show the version of Gradle that gradlew actually uses
-        # This is CRITICAL. It will reveal if gradlew is being executed and which Gradle version it resolves.
+          ./gradlew help --no-daemon # 'help' is a light command. --no-daemon prevents daemon issues.
+        # This command will force the download of gradle-wrapper.jar if it's missing.
+        # It also implicitly runs a version check. If this passes, the JAR download was successful.
+
+      # --- End: New/Updated Diagnostic & Fix Steps ---
 
       - name: Build Android App with Gradle
         run: |
           cd android
-          ./gradlew clean assembleDebug
-        # Your actual build command
+          ./gradlew clean assembleDebug # Your actual build command
+        # This step will now run after the JAR has (hopefully) been downloaded and verified.
