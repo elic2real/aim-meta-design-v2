@@ -22,12 +22,6 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Show directory and permissions
-        run: |
-          ls -la
-          ls -la android/
-          ls -la android/gradle/wrapper/
-
       - name: Show gradle-wrapper.properties
         run: cat android/gradle/wrapper/gradle-wrapper.properties
 
@@ -36,8 +30,8 @@ jobs:
 
       - name: Validate Gradle wrapper URL
         run: |
-          URL=$(grep distributionUrl android/gradle/wrapper/gradle-wrapper.properties | cut -d'=' -f2- | tr -d '\r')
-          echo "Using Gradle distribution: $URL"
+          URL=$(grep distributionUrl= android/gradle/wrapper/gradle-wrapper.properties | cut -d'=' -f2- | tr -d '\r' | xargs)
+          echo "Using Gradle distribution: '$URL'"
           curl -I "$URL"
 
       - name: Run Gradle build
