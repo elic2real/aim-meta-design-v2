@@ -1,4 +1,4 @@
-# ... (existing workflow preamble)
+name: Android CI
 
 on:
   push:
@@ -9,77 +9,38 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Or your specified runner
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Ensures full history for gradlew to function properly
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle'
+          cache: gradle
 
-      # --- Start: Aggressive Clean & Diagnostics for JAR Issue ---
-
-      - name: Aggressively clear Gradle caches and existing wrapper files
+      - name: Show directory and permissions
         run: |
-          echo "Clearing global Gradle caches..."
-          rm -rf ~/.gradle/caches
-          rm -rf ~/.gradle/wrapper
-          echo "Clearing project-specific Gradle build directories..."
-          rm -rf android/.gradle
-          rm -rf android/build
-          rm -rf android/app/build
-          # Crucially, remove any potentially partial or corrupted wrapper JAR
-          echo "Removing existing gradle-wrapper.jar if present..."
-          rm -f android/gradle/wrapper/gradle-wrapper.jar
-        # This ensures a completely fresh state for Gradle and its wrapper.
-
-      - name: Ensure gradlew has execute permissions and verify directory contents
-        run: |
-          echo "Setting execute permissions for gradlew..."
-          chmod +x android/gradlew
-          echo "Listing contents of android/ directory:"
+          ls -la
           ls -la android/
-          echo "Listing contents of android/gradle/wrapper/ directory:"
           ls -la android/gradle/wrapper/
-          echo "Checking available disk space:"
-          df -h .
-        # This provides a full view of permissions, existing files, and disk space.
 
-      - name: Debug - Show gradle-wrapper.properties content (final verification)
+      - name: Show gradle-wrapper.properties
         run: cat android/gradle/wrapper/gradle-wrapper.properties
-        # Double-check the distributionUrl once more.
 
-      - name: Debug - Check network connectivity to Gradle distributions
+      - name: Ensure gradlew is executable
+        run: chmod +x android/gradlew
+
+      - name: Validate Gradle wrapper URL
         run: |
-          echo "Pinging services.gradle.org..."
-          ping -c 3 services.gradle.org
-          echo "Attempting to download JAR directly with wget (diagnostic only)..."
-          # Try to download the JAR directly. This will confirm network access.
-          # We use the exact URL from gradle-wrapper.properties.
-          wget -q --spider https://services.gradle.org/distributions/gradle-8.0-all.zip
-          if [ $? -eq 0 ]; then
-            echo "Direct download test successful. Network seems fine."
-          else
-            echo "Direct download test FAILED. Possible network issue or firewall."
-          fi
-        # This explicitly tests if the runner can even reach the download server.
+          URL=$(grep distributionUrl android/gradle/wrapper/gradle-wrapper.properties | cut -d'=' -f2- | tr -d '\r')
+          echo "Using Gradle distribution: $URL"
+          curl -I "$URL"
 
-      - name: Force Gradle Wrapper JAR download and verify version
+      - name: Run Gradle build
         run: |
           cd android
-          echo "Attempting to run gradlew help to trigger JAR download..."
-          ./gradlew help --no-daemon --stacktrace --info # Add --stacktrace and --info for more verbose logging
-        # This is the step that should trigger the download. More verbose logging might reveal why it fails.
-
-      # --- End: Aggressive Clean & Diagnostics for JAR Issue ---
-
-      - name: Build Android App with Gradle
-        run: |
-          cd android
-          ./gradlew clean assembleDebug
-        # Your actual build command, which will run only if the previous step succeeded.
+          ./gradlew clean assembleDebug --stacktrace --no-daemon
