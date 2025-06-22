@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.1.2" type="partial_results">
+    <map id="UnsafeIntentLaunch">
+            <map id="unprotected">
+                <entry
+                    name="com.aim.metadesign.MainActivity"
+                    boolean="true"/>
+            </map>
+    </map>
+    <map id="UnusedResources">
+        <location id="R.string.custom_url_scheme"
+            file="${:app*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="6"
+            column="13"
+            startOffset="243"
+            endLine="6"
+            endColumn="37"
+            endOffset="267"/>
+        <location id="R.string.package_name"
+            file="${:app*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="5"
+            column="13"
+            startOffset="182"
+            endLine="5"
+            endColumn="32"
+            endOffset="201"/>
+        <location id="R.xml.config"
+            file="${:app*debug*sourceProvider*0*resDir*0}/xml/config.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="6"
+            endColumn="10"
+            endOffset="185"/>
+        <entry
+            name="model"
+            string="color[colorPrimary(U),colorPrimaryDark(U),colorAccent(U),ic_launcher_background(U)],drawable[splash(U)],mipmap[ic_launcher_round(U),ic_launcher_foreground(U),ic_launcher(U)],string[title_activity_main(U),app_name(U),custom_url_scheme(D),package_name(D)],style[Theme_AppCompat_Light_DarkActionBar(R),AppTheme_NoActionBarLaunch(U),AppTheme(U),AppTheme_NoActionBar(U)],xml[file_paths(U),config(D)];5^3^6,7^3^6,d^f^4,e^c^0^1^2,f^e;;;"/>
+    </map>
+
+</incidents>

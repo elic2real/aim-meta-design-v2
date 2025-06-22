@@ -1,0 +1,98 @@
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\build.gradle:17: Warning: Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details. [OldTargetApi]
+        targetSdkVersion 33
+        ~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "OldTargetApi":
+   When your application runs on a version of Android that is more recent than
+   your targetSdkVersion specifies that it has been tested with, various
+   compatibility modes kick in. This ensures that your application continues
+   to work, but it may look out of place. For example, if the targetSdkVersion
+   is less than 14, your app may get an option button in the UI.
+
+   To fix this issue, set the targetSdkVersion to the highest available value.
+   Then test your app to make sure everything works correctly. You may want to
+   consult the compatibility notes to see what changes apply to each version
+   you are adding support for:
+   https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+   as well as follow this guide:
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.
+   html
+
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.html
+
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\src\main\AndroidManifest.xml:40: Warning: <uses-permission> tag appears after <application> tag [ManifestOrder]
+    <uses-permission android:name="android.permission.INTERNET" />
+     ~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "ManifestOrder":
+   The <application> tag should appear after the elements which declare which
+   version you need, which features you need, which libraries you need, and so
+   on. In the past there have been subtle bugs (such as themes not getting
+   applied correctly) when the <application> tag appears before some of these
+   other elements, so it's best to order your manifest in the logical
+   dependency order.
+
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\build.gradle:37: Warning: A newer version of androidx.appcompat:appcompat than 1.6.1 is available: 1.7.1 [GradleDependency]
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\build.gradle:38: Warning: A newer version of androidx.constraintlayout:constraintlayout than 2.1.4 is available: 2.2.1 [GradleDependency]
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\build.gradle:41: Warning: A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.2.1 [GradleDependency]
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\build.gradle:42: Warning: A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.6.1 [GradleDependency]
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\src\main\res\xml\config.xml:2: Warning: The resource R.xml.config appears to be unused [UnusedResources]
+<widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+^
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\src\main\res\values\strings.xml:5: Warning: The resource R.string.package_name appears to be unused [UnusedResources]
+    <string name="package_name">com.aim.metadesign</string>
+            ~~~~~~~~~~~~~~~~~~~
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\src\main\res\values\strings.xml:6: Warning: The resource R.string.custom_url_scheme appears to be unused [UnusedResources]
+    <string name="custom_url_scheme">com.aim.metadesign</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests =true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests =true.
+   ,
+
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\src\main\res\mipmap-anydpi-v26\ic_launcher.xml:2: Warning: The application adaptive icon is missing a monochrome tag [MonochromeLauncherIcon]
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+^
+C:\Users\mawil\Documents\aim-meta-design-v2\android\app\src\main\res\mipmap-anydpi-v26\ic_launcher_round.xml:2: Warning: The application adaptive roundIcon is missing a monochrome tag [MonochromeLauncherIcon]
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+^
+
+   Explanation for issues of type "MonochromeLauncherIcon":
+   If android:roundIcon and android:icon are both in your manifest, you must
+   either remove the reference to android:roundIcon if it is not needed; or,
+   supply the monochrome icon in the drawable defined by the android:roundIcon
+   and android:icon attribute.
+
+   For example, if android:roundIcon and android:icon are both in the
+   manifest, a launcher might choose to use android:roundIcon over
+   android:icon to display the adaptive app icon. Therefore, your themed
+   application iconwill not show if your monochrome attribute is not also
+   specified in android:roundIcon.
+
+0 errors, 11 warnings

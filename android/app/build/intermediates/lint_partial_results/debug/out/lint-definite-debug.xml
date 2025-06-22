@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.1.2" type="incidents">
+
+    <incident
+        id="ManifestOrder"
+        severity="warning"
+        message="`&lt;uses-permission>` tag appears after `&lt;application>` tag">
+        <location
+            file="${:app*debug*sourceProvider*0*manifest*0}"
+            line="40"
+            column="6"
+            startOffset="1652"
+            endLine="40"
+            endColumn="21"
+            endOffset="1667"/>
+    </incident>
+
+    <incident
+        id="MonochromeLauncherIcon"
+        severity="warning"
+        message="The application adaptive icon is missing a monochrome tag">
+        <location
+            file="${:app*debug*sourceProvider*0*resDir*0}/mipmap-anydpi-v26/ic_launcher.xml"
+            line="2"
+            column="1"
+            startOffset="40"
+            endLine="5"
+            endColumn="17"
+            endOffset="269"/>
+    </incident>
+
+    <incident
+        id="MonochromeLauncherIcon"
+        severity="warning"
+        message="The application adaptive roundIcon is missing a monochrome tag">
+        <location
+            file="${:app*debug*sourceProvider*0*resDir*0}/mipmap-anydpi-v26/ic_launcher_round.xml"
+            line="2"
+            column="1"
+            startOffset="40"
+            endLine="5"
+            endColumn="17"
+            endOffset="269"/>
+    </incident>
+
+    <incident
+        id="OldTargetApi"
+        severity="warning"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details.">
+        <fix-replace
+            description="Update targetSdkVersion to 35"
+            oldString="33"
+            replacement="35"/>
+        <location
+            file="${:app*projectDir}/build.gradle"
+            line="17"
+            column="9"
+            startOffset="481"
+            endLine="17"
+            endColumn="28"
+            endOffset="500"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.appcompat:appcompat than 1.6.1 is available: 1.7.1">
+        <fix-replace
+            description="Change to 1.7.1"
+            family="Update versions"
+            oldString="1.6.1"
+            replacement="1.7.1"/>
+        <location
+            file="${:app*projectDir}/build.gradle"
+            line="37"
+            column="20"
+            startOffset="1066"
+            endLine="37"
+            endColumn="56"
+            endOffset="1102"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.constraintlayout:constraintlayout than 2.1.4 is available: 2.2.1">
+        <fix-replace
+            description="Change to 2.2.1"
+            family="Update versions"
+            oldString="2.1.4"
+            replacement="2.2.1"/>
+        <location
+            file="${:app*projectDir}/build.gradle"
+            line="38"
+            column="20"
+            startOffset="1123"
+            endLine="38"
+            endColumn="70"
+            endOffset="1173"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.2.1">
+        <fix-replace
+            description="Change to 1.2.1"
+            family="Update versions"
+            oldString="1.1.5"
+            replacement="1.2.1"/>
+        <location
+            file="${:app*projectDir}/build.gradle"
+            line="41"
+            column="31"
+            startOffset="1300"
+            endLine="41"
+            endColumn="62"
+            endOffset="1331"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.6.1">
+        <fix-replace
+            description="Change to 3.6.1"
+            family="Update versions"
+            oldString="3.5.1"
+            replacement="3.6.1"/>
+        <location
+            file="${:app*projectDir}/build.gradle"
+            line="42"
+            column="31"
+            startOffset="1363"
+            endLine="42"
+            endColumn="75"
+            endOffset="1407"/>
+    </incident>
+
+</incidents>

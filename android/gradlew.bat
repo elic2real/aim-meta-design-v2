@@ -1,12 +1,5 @@
-@echo off
-@rem ------------------------------------------------------------------------------
-@rem Gradle start up script for Windows
-@rem ------------------------------------------------------------------------------
-
-setlocal
-
-@rem ------------------------------------------------------------------------------
-@rem Copyright 2011-2023 the original author or authors.
+@rem
+@rem Copyright 2015 the original author or authors.
 @rem
 @rem Licensed under the Apache License, Version 2.0 (the "License");
 @rem you may not use this file except in compliance with the License.
@@ -19,82 +12,83 @@ setlocal
 @rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 @rem See the License for the specific language governing permissions and
 @rem limitations under the License.
-@rem ------------------------------------------------------------------------------
+@rem
+@rem SPDX-License-Identifier: Apache-2.0
+@rem
 
-@rem Determine the Java command to use to launch the JVM.
-@if not "%JAVA_HOME%"=="" (
-    @if exist "%JAVA_HOME%\jre\sh\java.exe" (
-        @rem IBM's JDK on AIX uses "%JAVA_HOME%\jre\sh\java" as the system Java executable.
-        set JAVACMD="%JAVA_HOME%\jre\sh\java.exe"
-    ) else (
-        set JAVACMD="%JAVA_HOME%\bin\java.exe"
-    )
-    @if not exist %JAVACMD% (
-        echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
-        echo.
-        echo Please set the JAVA_HOME environment variable in your shell to the correct location of your Java Development Kit (JDK).
-        exit /b 1
-    )
-) else (
-    set JAVACMD=java.exe
-)
+@if "%DEBUG%"=="" @echo off
+@rem ##########################################################################
+@rem
+@rem  Gradle startup script for Windows
+@rem
+@rem ##########################################################################
 
-@rem Determine the script directory.
-@for /f "delims=" %%i in ("%~dp0") do set SCRIPT_DIR=%%i
+@rem Set local scope for the variables with windows NT shell
+if "%OS%"=="Windows_NT" setlocal
 
-@rem Determine the Gradle distribution properties.
-set GRADLE_DIR=%SCRIPT_DIR%\gradle
-set GRADLE_JAR=%GRADLE_DIR%\wrapper\gradle-wrapper.jar
-set GRADLE_PROPERTIES=%GRADLE_DIR%\wrapper\gradle-wrapper.properties
+set DIRNAME=%~dp0
+if "%DIRNAME%"=="" set DIRNAME=.
+@rem This is normally unused
+set APP_BASE_NAME=%~n0
+set APP_HOME=%DIRNAME%
 
-@if not exist "%GRADLE_JAR%" (
-    echo ERROR: Gradle wrapper JAR not found: %GRADLE_JAR%
-    exit /b 1
-)
-@if not exist "%GRADLE_PROPERTIES%" (
-    echo ERROR: Gradle wrapper properties not found: %GRADLE_PROPERTIES%
-    exit /b 1
-)
+@rem Resolve any "." and ".." in APP_HOME to make it shorter.
+for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
-@rem Read the distributionUrl from gradle-wrapper.properties.
-for /f "usebackq tokens=*" %%a in (`findstr /R /C:"^distributionUrl=" "%GRADLE_PROPERTIES%"`) do (
-    set DISTRIBUTION_URL=%%a
-)
-for /f "delims== tokens=2*" %%a in ("%DISTRIBUTION_URL%") do set DISTRIBUTION_URL=%%a
-set DISTRIBUTION_URL=%DISTRIBUTION_URL:^/=/%
-set DISTRIBUTION_URL=%DISTRIBUTION_URL:%%\\=/%
-if "%DISTRIBUTION_URL%"=="" (
-    echo ERROR: distributionUrl not found in %GRADLE_PROPERTIES%
-    exit /b 1
-)
+@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
-@rem Calculate the wrapper checksum, if present.
-for /f "usebackq tokens=*" %%a in (`findstr /R /C:"^wrapperChecksum=" "%GRADLE_PROPERTIES%"`) do (
-    set WRAPPER_CHECKSUM=%%a
-)
-for /f "delims== tokens=2*" %%a in ("%WRAPPER_CHECKSUM%") do set WRAPPER_CHECKSUM=%%a
+@rem Find java.exe
+if defined JAVA_HOME goto findJavaFromJavaHome
 
-@if not "%WRAPPER_CHECKSUM%"=="" (
-    @rem Verify the checksum of the wrapper JAR.
-    set CURRENT_CHECKSUM=
-    for /f "usebackq" %%a in (`certutil -hashfile "%GRADLE_JAR%" SHA256 ^| findstr /B /C:"SHA256 hash:"`) do set CURRENT_CHECKSUM=%%a
-    set CURRENT_CHECKSUM=%CURRENT_CHECKSUM:*SHA256 hash: =%
-    set CURRENT_CHECKSUM=%CURRENT_CHECKSUM: =%
-    if /I not "%CURRENT_CHECKSUM%"=="%WRAPPER_CHECKSUM%" (
-        echo ERROR: Gradle wrapper JAR checksum mismatch!
-        echo Expected: %WRAPPER_CHECKSUM%
-        echo Actual: %CURRENT_CHECKSUM%
-        echo Please delete %GRADLE_JAR% and try again.
-        exit /b 1
-    )
-)
+set JAVA_EXE=java.exe
+%JAVA_EXE% -version >NUL 2>&1
+if %ERRORLEVEL% equ 0 goto execute
 
-@rem Determine the classpath.
-set CLASSPATH=%GRADLE_JAR%
+echo. 1>&2
+echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH. 1>&2
+echo. 1>&2
+echo Please set the JAVA_HOME variable in your environment to match the 1>&2
+echo location of your Java installation. 1>&2
 
-@rem Set Gradle options (optional).
-set DEFAULT_JVM_OPTS=-Xmx64m -Xms64m
-set GRADLE_OPTS=%GRADLE_OPTS% %DEFAULT_JVM_OPTS%
+goto fail
 
-@rem Execute Gradle.
-"%JAVACMD%" %GRADLE_OPTS% -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
+:findJavaFromJavaHome
+set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+
+if exist "%JAVA_EXE%" goto execute
+
+echo. 1>&2
+echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME% 1>&2
+echo. 1>&2
+echo Please set the JAVA_HOME variable in your environment to match the 1>&2
+echo location of your Java installation. 1>&2
+
+goto fail
+
+:execute
+@rem Setup the command line
+
+set CLASSPATH=
+
+
+@rem Execute Gradle
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" -jar "%APP_HOME%\gradle\wrapper\gradle-wrapper.jar" %*
+
+:end
+@rem End local scope for the variables with windows NT shell
+if %ERRORLEVEL% equ 0 goto mainEnd
+
+:fail
+rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
+rem the _cmd.exe /c_ return code!
+set EXIT_CODE=%ERRORLEVEL%
+if %EXIT_CODE% equ 0 set EXIT_CODE=1
+if not ""=="%GRADLE_EXIT_CONSOLE%" exit %EXIT_CODE%
+exit /b %EXIT_CODE%
+
+:mainEnd
+if "%OS%"=="Windows_NT" endlocal
+
+:omega
